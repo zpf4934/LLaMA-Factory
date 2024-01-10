@@ -42,7 +42,8 @@ def get_preview(dataset_dir: str, dataset: list, page_index: int) -> Tuple[int, 
         dataset_info = json.load(f)
 
     data_file: str = dataset_info[dataset[0]]["file_name"]
-    with open(os.path.join(dataset_dir, data_file), "r", encoding="utf-8") as f:
+    data_file = data_file if os.path.isabs(data_file) else os.path.join(dataset_dir, data_file)
+    with open(data_file, "r", encoding="utf-8") as f:
         if data_file.endswith(".json"):
             data = json.load(f)
         elif data_file.endswith(".jsonl"):

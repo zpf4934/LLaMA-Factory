@@ -285,6 +285,16 @@ LOCALES = {
             "label": "其它参数设置"
         }
     },
+    "log_level": {
+        "en": {
+            "label": "Logging level",
+            "info": "log level."
+        },
+        "zh": {
+            "label": "日志级别",
+            "info": "设置日志输出级别。"
+        }
+    },
     "logging_steps": {
         "en": {
             "label": "Logging steps",
@@ -343,6 +353,56 @@ LOCALES = {
         "zh": {
             "label": "缩放归一化层",
             "info": "将归一化层权重缩放至 32 位浮点数。"
+        }
+    },
+    "preprocessing_num_workers": {
+        "en": {
+            "label": "Preprocessing Num Workers",
+            "info": "The number workers."
+        },
+        "zh": {
+            "label": "进程数量",
+            "info": "设置数据处理的进程数。"
+        }
+    },
+    "overwrite_output_dir": {
+        "en": {
+            "label": "Overwrite Output Dir",
+            "info": "overwrite output dir."
+        },
+        "zh": {
+            "label": "覆盖输出文件夹",
+            "info": "设置是否覆盖输出文件目录。"
+        }
+    },
+    "report_to": {
+        "en": {
+            "label": "Report To",
+            "info": "set report log type."
+        },
+        "zh": {
+            "label": "报告类型",
+            "info": "设置训练报告类型。"
+        }
+    },
+    "overwrite_cache": {
+        "en": {
+            "label": "Overwrite Cache",
+            "info": "overwrite cache file."
+        },
+        "zh": {
+            "label": "覆盖缓存文件",
+            "info": "是否覆盖缓存文件。"
+        }
+    },
+    "streaming": {
+        "en": {
+            "label": "streaming",
+            "info": "streaming data load."
+        },
+        "zh": {
+            "label": "流式加載",
+            "info": "是否流式加載文件。"
         }
     },
     "lora_tab": {
@@ -439,6 +499,14 @@ LOCALES = {
             "value": "预览命令"
         }
     },
+    "save_script_btn": {
+        "en": {
+            "value": "Save Script"
+        },
+        "zh": {
+            "value": "保存配置"
+        }
+    },
     "start_btn": {
         "en": {
             "value": "Start"
@@ -463,6 +531,26 @@ LOCALES = {
         "zh": {
             "label": "输出目录",
             "info": "保存结果的路径。"
+        }
+    },
+    "cache_dir": {
+        "en": {
+            "label": "Cache dir",
+            "info": "Data cache path."
+        },
+        "zh": {
+            "label": "缓存目录",
+            "info": "保存缓存数据的路径。"
+        }
+    },
+    "scripts_file": {
+        "en": {
+            "label": "Scripts File",
+            "info": "Cache script file."
+        },
+        "zh": {
+            "label": "缓存配置",
+            "info": "缓存的配置文件，如果选择缓存配置优先执行缓存配置。"
         }
     },
     "output_box": {

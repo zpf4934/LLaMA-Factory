@@ -1,9 +1,11 @@
+import inspect
+
 import gradio as gr
 from typing import TYPE_CHECKING, Dict
 from transformers.trainer_utils import SchedulerType
 
-from llmtuner.extras.constants import TRAINING_STAGES
-from llmtuner.webui.common import list_adapters, list_dataset, DEFAULT_DATA_DIR
+from llmtuner.extras.constants import TRAINING_STAGES, REPORT, LOG_LEVEL
+from llmtuner.webui.common import list_adapters, list_dataset, get_scripts, DEFAULT_DATA_DIR
 from llmtuner.webui.components.data import create_preview_box
 from llmtuner.webui.utils import gen_plot
 
@@ -11,6 +13,20 @@ if TYPE_CHECKING:
     from gradio.components import Component
     from llmtuner.webui.engine import Engine
 
+
+def output_postprocess(y: str | None) -> str | None:
+    """
+    Parameters:
+        y: markdown representation
+    Returns:
+        HTML rendering of markdown
+    """
+    if y is None:
+        return None
+    unindented_y = inspect.cleandoc(y)
+    if not unindented_y.startswith("```bash"):
+        unindented_y = '\n'.join(unindented_y.split('\n')[:-50:-1])
+    return unindented_y
 
 def create_train_tab(engine: "Engine") -> Dict[str, "Component"]:
     input_elems = engine.manager.get_base_elems()
@@ -33,10 +49,10 @@ def create_train_tab(engine: "Engine") -> Dict[str, "Component"]:
     ))
 
     with gr.Row():
-        cutoff_len = gr.Slider(value=1024, minimum=4, maximum=8192, step=1)
+        cutoff_len = gr.Slider(value=1024, minimum=4, maximum=32000, step=100)
         learning_rate = gr.Textbox(value="5e-5")
         num_train_epochs = gr.Textbox(value="3.0")
-        max_samples = gr.Textbox(value="100000")
+        max_samples = gr.Textbox(value="-1")
         compute_type = gr.Radio(choices=["fp16", "bf16"], value="fp16")
 
     input_elems.update({cutoff_len, learning_rate, num_train_epochs, max_samples, compute_type})
@@ -71,10 +87,23 @@ def create_train_tab(engine: "Engine") -> Dict[str, "Component"]:
                 train_on_prompt = gr.Checkbox(value=False)
                 upcast_layernorm = gr.Checkbox(value=False)
 
-    input_elems.update({logging_steps, save_steps, warmup_steps, neftune_alpha, train_on_prompt, upcast_layernorm})
+        with gr.Row():
+            preprocessing_num_workers = gr.Slider(value=5, minimum=1, maximum=30, step=1)
+            overwrite_output_dir = gr.Checkbox(value=True, interactive=True)
+            overwrite_cache = gr.Checkbox(value=False, interactive=True)
+            streaming = gr.Checkbox(value=False, interactive=True)
+            report_to = gr.Dropdown(choices=REPORT, value=0, scale=1)
+            log_level = gr.Dropdown(choices=LOG_LEVEL, value=0, scale=1)
+
+
+    input_elems.update({logging_steps, save_steps, warmup_steps, neftune_alpha, train_on_prompt, upcast_layernorm,
+                        preprocessing_num_workers, overwrite_output_dir, report_to, overwrite_cache, streaming,
+                        log_level})
     elem_dict.update(dict(
         extra_tab=extra_tab, logging_steps=logging_steps, save_steps=save_steps, warmup_steps=warmup_steps,
-        neftune_alpha=neftune_alpha, train_on_prompt=train_on_prompt, upcast_layernorm=upcast_layernorm
+        neftune_alpha=neftune_alpha, train_on_prompt=train_on_prompt, upcast_layernorm=upcast_layernorm,
+        preprocessing_num_workers=preprocessing_num_workers, overwrite_output_dir=overwrite_output_dir,
+        report_to=report_to, overwrite_cache=overwrite_cache, streaming=streaming,log_level=log_level
     ))
 
     with gr.Accordion(label="LoRA config", open=False) as lora_tab:
@@ -109,35 +138,42 @@ def create_train_tab(engine: "Engine") -> Dict[str, "Component"]:
 
     with gr.Row():
         cmd_preview_btn = gr.Button()
+        save_script_btn = gr.Button()
         start_btn = gr.Button()
         stop_btn = gr.Button()
 
     with gr.Row():
-        with gr.Column(scale=3):
-            with gr.Row():
-                output_dir = gr.Textbox()
+        output_dir = gr.Textbox()
+        cache_dir = gr.Textbox(value='/aigc/dataclub/cache')
+        scripts_file = gr.Dropdown(choices=get_scripts(), value=0, scale=1)
 
-            with gr.Row():
-                resume_btn = gr.Checkbox(visible=False, interactive=False, value=False)
-                process_bar = gr.Slider(visible=False, interactive=False)
-
-            with gr.Box():
-                output_box = gr.Markdown()
-
-        with gr.Column(scale=1):
+    with gr.Accordion(label="损失", open=False):
+        with gr.Row():
             loss_viewer = gr.Plot()
 
-    input_elems.add(output_dir)
+    with gr.Row():
+        resume_btn = gr.Checkbox(visible=False, interactive=False, value=False)
+        process_bar = gr.Slider(visible=False, interactive=False)
+
+    with gr.Box():
+        output_box = gr.Markdown()
+
+
+    output_box.postprocess = output_postprocess
+    input_elems.update({output_dir, cache_dir, scripts_file})
     output_elems = [output_box, process_bar]
 
     cmd_preview_btn.click(engine.runner.preview_train, input_elems, output_elems)
+    save_script_btn.click(engine.runner.save_scripts,  input_elems, scripts_file)
     start_btn.click(engine.runner.run_train, input_elems, output_elems)
     stop_btn.click(engine.runner.set_abort, queue=False)
     resume_btn.change(engine.runner.monitor, outputs=output_elems)
+    scripts_file.change(engine.runner.preview_script, input_elems, output_elems)
 
     elem_dict.update(dict(
         cmd_preview_btn=cmd_preview_btn, start_btn=start_btn, stop_btn=stop_btn, output_dir=output_dir,
-        resume_btn=resume_btn, process_bar=process_bar, output_box=output_box, loss_viewer=loss_viewer
+        resume_btn=resume_btn, process_bar=process_bar, output_box=output_box, loss_viewer=loss_viewer,
+        cache_dir=cache_dir,scripts_file=scripts_file,save_script_btn=save_script_btn
     ))
 
     output_box.change(

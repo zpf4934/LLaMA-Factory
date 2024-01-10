@@ -1,23 +1,28 @@
 {
   "alpaca_en": {
     "file_name": "alpaca_data_en_52k.json",
-    "file_sha1": "607f94a7f581341e59685aef32f531095232cf23"
+    "file_sha1": "607f94a7f581341e59685aef32f531095232cf23",
+    "enable": false
   },
   "alpaca_zh": {
     "file_name": "alpaca_data_zh_51k.json",
-    "file_sha1": "e655af3db557a4197f7b0cf92e1986b08fae6311"
+    "file_sha1": "e655af3db557a4197f7b0cf92e1986b08fae6311",
+    "enable": false
   },
   "alpaca_gpt4_en": {
     "file_name": "alpaca_gpt4_data_en.json",
-    "file_sha1": "647f4ad447bd993e4b6b6223d1be15208bab694a"
+    "file_sha1": "647f4ad447bd993e4b6b6223d1be15208bab694a",
+    "enable": false
   },
   "alpaca_gpt4_zh": {
     "file_name": "alpaca_gpt4_data_zh.json",
-    "file_sha1": "3eaa3bda364ccdd59925d7448a698256c31ef845"
+    "file_sha1": "3eaa3bda364ccdd59925d7448a698256c31ef845",
+    "enable": false
   },
   "self_cognition": {
     "file_name": "self_cognition.json",
-    "file_sha1": "6287a730ada924fc5d9eadc6d8f865e01b7a6f67"
+    "file_sha1": "6287a730ada924fc5d9eadc6d8f865e01b7a6f67",
+    "enable": true
   },
   "oaast_sft": {
     "file_name": "oaast_sft.json",
@@ -27,7 +32,8 @@
       "query": "input",
       "response": "output",
       "history": "history"
-    }
+    },
+    "enable": false
   },
   "oaast_sft_zh": {
     "file_name": "oaast_sft_zh.json",
@@ -37,7 +43,8 @@
       "query": "input",
       "response": "output",
       "history": "history"
-    }
+    },
+    "enable": false
   },
   "lima": {
     "file_name": "lima.json",
@@ -47,7 +54,8 @@
       "query": "input",
       "response": "output",
       "history": "history"
-    }
+    },
+    "enable": false
   },
   "example": {
     "script_url": "example_dataset",
@@ -56,51 +64,63 @@
       "query": "input",
       "response": "output",
       "history": "history"
-    }
+    },
+    "enable": false
   },
   "guanaco": {
     "hf_hub_url": "JosephusCheung/GuanacoDataset",
-    "ms_hub_url": "AI-ModelScope/GuanacoDataset"
+    "ms_hub_url": "AI-ModelScope/GuanacoDataset",
+    "enable": false
   },
   "belle_2m": {
     "hf_hub_url": "BelleGroup/train_2M_CN",
-    "ms_hub_url": "AI-ModelScope/train_2M_CN"
+    "ms_hub_url": "AI-ModelScope/train_2M_CN",
+    "enable": false
   },
   "belle_1m": {
     "hf_hub_url": "BelleGroup/train_1M_CN",
-    "ms_hub_url": "AI-ModelScope/train_1M_CN"
+    "ms_hub_url": "AI-ModelScope/train_1M_CN",
+    "enable": false
   },
   "belle_0.5m": {
     "hf_hub_url": "BelleGroup/train_0.5M_CN",
-    "ms_hub_url": "AI-ModelScope/train_0.5M_CN"
+    "ms_hub_url": "AI-ModelScope/train_0.5M_CN",
+    "enable": false
   },
   "belle_dialog": {
     "hf_hub_url": "BelleGroup/generated_chat_0.4M",
-    "ms_hub_url": "AI-ModelScope/generated_chat_0.4M"
+    "ms_hub_url": "AI-ModelScope/generated_chat_0.4M",
+    "enable": false
   },
   "belle_math": {
     "hf_hub_url": "BelleGroup/school_math_0.25M",
-    "ms_hub_url": "AI-ModelScope/school_math_0.25M"
+    "ms_hub_url": "AI-ModelScope/school_math_0.25M",
+    "enable": false
   },
   "belle_multiturn": {
     "script_url": "belle_multiturn",
-    "formatting": "sharegpt"
+    "formatting": "sharegpt",
+    "enable": false
   },
   "ultra_chat": {
     "script_url": "ultra_chat",
-    "formatting": "sharegpt"
+    "formatting": "sharegpt",
+    "enable": false
   },
   "open_platypus": {
     "hf_hub_url": "garage-bAInd/Open-Platypus",
-    "ms_hub_url": "AI-ModelScope/Open-Platypus"
+    "ms_hub_url": "AI-ModelScope/Open-Platypus",
+    "enable": false
   },
   "codealpaca": {
     "hf_hub_url": "sahil2801/CodeAlpaca-20k",
-    "ms_hub_url": "AI-ModelScope/CodeAlpaca-20k"
+    "ms_hub_url": "AI-ModelScope/CodeAlpaca-20k",
+    "enable": false
   },
   "alpaca_cot": {
     "hf_hub_url": "QingyiSi/Alpaca-CoT",
-    "ms_hub_url": "AI-ModelScope/Alpaca-CoT"
+    "ms_hub_url": "AI-ModelScope/Alpaca-CoT",
+    "enable": false
   },
   "openorca": {
     "hf_hub_url": "Open-Orca/OpenOrca",
@@ -109,7 +129,8 @@
       "prompt": "question",
       "response": "response",
       "system": "system_prompt"
-    }
+    },
+    "enable": false
   },
   "mathinstruct": {
     "hf_hub_url": "TIGER-Lab/MathInstruct",
@@ -117,14 +138,16 @@
     "columns": {
       "prompt": "instruction",
       "response": "output"
-    }
+    },
+    "enable": false
   },
   "firefly": {
     "hf_hub_url": "YeungNLP/firefly-train-1.1M",
     "columns": {
       "prompt": "input",
       "response": "target"
-    }
+    },
+    "enable": false
   },
   "webqa": {
     "hf_hub_url": "suolyer/webqa",
@@ -132,17 +155,21 @@
     "columns": {
       "prompt": "input",
       "response": "output"
-    }
+    },
+    "enable": false
   },
   "webnovel": {
     "hf_hub_url": "zxbsmk/webnovel_cn",
-    "ms_hub_url": "AI-ModelScope/webnovel_cn"
+    "ms_hub_url": "AI-ModelScope/webnovel_cn",
+    "enable": false
   },
   "nectar_sft": {
-    "hf_hub_url": "mlinmg/SFT-Nectar"
+    "hf_hub_url": "mlinmg/SFT-Nectar",
+    "enable": false
   },
   "deepctrl": {
-    "ms_hub_url": "deepctrl/deepctrl-sft-data"
+    "ms_hub_url": "deepctrl/deepctrl-sft-data",
+    "enable": false
   },
   "adgen": {
     "hf_hub_url": "HasturOfficial/adgen",
@@ -150,16 +177,19 @@
     "columns": {
       "prompt": "content",
       "response": "summary"
-    }
+    },
+    "enable": false
   },
   "sharegpt_hyper": {
     "hf_hub_url": "totally-not-an-llm/sharegpt-hyperfiltered-3k",
-    "formatting": "sharegpt"
+    "formatting": "sharegpt",
+    "enable": false
   },
   "sharegpt4": {
     "hf_hub_url": "shibing624/sharegpt_gpt4",
     "ms_hub_url": "AI-ModelScope/sharegpt_gpt4",
-    "formatting": "sharegpt"
+    "formatting": "sharegpt",
+    "enable": false
   },
   "ultrachat_200k": {
     "hf_hub_url": "HuggingFaceH4/ultrachat_200k",
@@ -169,12 +199,14 @@
       "role": "role",
       "content": "content"
     },
-    "formatting": "sharegpt"
+    "formatting": "sharegpt",
+    "enable": false
   },
   "agent_instruct": {
     "hf_hub_url": "THUDM/AgentInstruct",
     "ms_hub_url": "ZhipuAI/AgentInstruct",
-    "formatting": "sharegpt"
+    "formatting": "sharegpt",
+    "enable": false
   },
   "lmsys_chat": {
     "hf_hub_url": "lmsys/lmsys-chat-1m",
@@ -184,11 +216,13 @@
       "role": "role",
       "content": "content"
     },
-    "formatting": "sharegpt"
+    "formatting": "sharegpt",
+    "enable": false
   },
   "evol_instruct": {
     "hf_hub_url": "WizardLM/WizardLM_evol_instruct_V2_196k",
-    "formatting": "sharegpt"
+    "formatting": "sharegpt",
+    "enable": false
   },
   "hh_rlhf_en": {
     "script_url": "hh_rlhf_en",
@@ -197,7 +231,8 @@
       "response": "output",
       "history": "history"
     },
-    "ranking": true
+    "ranking": true,
+    "enable": false
   },
   "oaast_rm": {
     "file_name": "oaast_rm.json",
@@ -208,7 +243,8 @@
       "response": "output",
       "history": "history"
     },
-    "ranking": true
+    "ranking": true,
+    "enable": false
   },
   "oaast_rm_zh": {
     "file_name": "oaast_rm_zh.json",
@@ -219,81 +255,94 @@
       "response": "output",
       "history": "history"
     },
-    "ranking": true
+    "ranking": true,
+    "enable": false
   },
   "comparison_gpt4_en": {
     "file_name": "comparison_gpt4_data_en.json",
     "file_sha1": "96fa18313544e22444fe20eead7754b17da452ae",
-    "ranking": true
+    "ranking": true,
+    "enable": false
   },
   "comparison_gpt4_zh": {
     "file_name": "comparison_gpt4_data_zh.json",
     "file_sha1": "515b18ed497199131ddcc1af950345c11dc5c7fd",
-    "ranking": true
+    "ranking": true,
+    "enable": false
   },
   "nectar_rm": {
     "hf_hub_url": "mlinmg/RLAIF-Nectar",
-    "ranking": true
+    "ranking": true,
+    "enable": false
   },
   "wiki_demo": {
     "file_name": "wiki_demo.txt",
     "file_sha1": "e70375e28eda542a90c68213640cc371898ce181",
     "columns": {
       "prompt": "text"
-    }
+    },
+    "enable": false
   },
   "c4_demo": {
     "file_name": "c4_demo.json",
     "file_sha1": "a5a0c86759732f9a5238e447fecd74f28a66cca8",
     "columns": {
       "prompt": "text"
-    }
+    },
+    "enable": false
   },
   "refinedweb": {
     "hf_hub_url": "tiiuae/falcon-refinedweb",
     "columns": {
       "prompt": "content"
-    }
+    },
+    "enable": false
   },
   "redpajama_v2": {
     "hf_hub_url": "togethercomputer/RedPajama-Data-V2",
     "columns": {
       "prompt": "raw_content"
     },
-    "subset": "default"
+    "subset": "default",
+    "enable": false
   },
   "wikipedia_en": {
     "hf_hub_url": "olm/olm-wikipedia-20221220",
     "columns": {
       "prompt": "text"
-    }
+    },
+    "enable": false
   },
   "wikipedia_zh": {
     "hf_hub_url": "pleisto/wikipedia-cn-20230720-filtered",
     "ms_hub_url": "AI-ModelScope/wikipedia-cn-20230720-filtered",
     "columns": {
       "prompt": "completion"
-    }
+    },
+    "enable": false
   },
   "pile": {
     "hf_hub_url": "EleutherAI/pile",
     "columns": {
       "prompt": "text"
     },
-    "subset": "all"
+    "subset": "all",
+    "enable": false
   },
   "skypile": {
     "hf_hub_url": "Skywork/SkyPile-150B",
     "columns": {
       "prompt": "text"
-    }
+    },
+    "enable": false
   },
   "the_stack": {
     "hf_hub_url": "bigcode/the-stack",
     "ms_hub_url": "AI-ModelScope/the-stack",
     "columns": {
       "prompt": "content"
-    }
+    },
+    "enable": false
   },
   "starcoder_python": {
     "hf_hub_url": "bigcode/starcoderdata",
@@ -301,6 +350,64 @@
     "columns": {
       "prompt": "content"
     },
-    "folder": "python"
+    "folder": "python",
+    "enable": false
+  },
+  "ICT_sft": {
+    "file_name": "ICT_sft.jsonl",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    },
+    "enable": true
+  },
+  "mult_base_sft": {
+    "file_name": "/aigc/dataclub/微调数据集/mult_base_sft.jsonl",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "history": "history"
+    },
+    "enable": true
+  },
+  "single_base_sft": {
+    "file_name": "/aigc/dataclub/微调数据集/single_base_sft.jsonl",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    },
+    "enable": true
+  },
+  "base_pt": {
+    "file_name": "/aigc/dataclub/预训练数据集/base_pt.jsonl",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "history": "history"
+    },
+    "enable": true
+  },
+  "aijiwei": {
+    "file_name": "aijiwei.jsonl",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    },
+    "enable": true
+  },
+  "base_sft": {
+    "file_name": "/aigc/dataclub/微调数据集/base_sft.jsonl",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "history": "history"
+    },
+    "enable": true
   }
 }

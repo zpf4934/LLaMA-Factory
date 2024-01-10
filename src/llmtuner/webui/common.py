@@ -50,6 +50,11 @@ def save_config(lang: str, model_name: Optional[str] = None, model_path: Optiona
     with open(get_config_path(), "w", encoding="utf-8") as f:
         json.dump(user_config, f, indent=2, ensure_ascii=False)
 
+def get_scripts() -> list:
+    files = os.listdir(DEFAULT_CACHE_DIR)
+    files = ['无'] + [file for file in files if file.endswith('json')]
+    return files
+
 
 def get_model_path(model_name: str) -> str:
     user_config = load_config()
@@ -108,6 +113,7 @@ def list_dataset(
     dataset_dir: Optional[str] = None, training_stage: Optional[str] = list(TRAINING_STAGES.keys())[0]
 ) -> Dict[str, Any]:
     dataset_info = load_dataset_info(dataset_dir if dataset_dir is not None else DEFAULT_DATA_DIR)
+    dataset_info = {key: value for key, value in dataset_info.items() if value.get('enable', False)}
     ranking = TRAINING_STAGES[training_stage] in ["rm", "dpo"]
     datasets = [k for k, v in dataset_info.items() if v.get("ranking", False) == ranking]
     return gr.update(value=[], choices=datasets)

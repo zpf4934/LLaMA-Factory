@@ -97,7 +97,7 @@ def get_dataset(
         if data_args.streaming and (dataset_attr.load_from == "file"): # faster than specifying streaming=True
             dataset = dataset.to_iterable_dataset() # TODO: add num shards parameter
 
-        if max_samples is not None: # truncate dataset
+        if max_samples is not None and max_samples > 0: # truncate dataset
             dataset = dataset.select(range(min(len(dataset), max_samples)))
 
         def convert_format(examples: Dict[str, List[Any]]) -> Dict[str, List[Any]]:

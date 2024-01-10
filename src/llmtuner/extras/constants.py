@@ -30,6 +30,10 @@ PEFT_METHODS = ["lora"]
 
 SUBJECTS = ["Average", "STEM", "Social Sciences", "Humanities", "Other"]
 
+REPORT = [None, 'wandb', 'tensorboard', 'mlflow']
+
+LOG_LEVEL = ['debug', 'info', 'warning', 'error' , 'critical']
+
 SUPPORTED_MODELS = OrderedDict()
 
 TRAINING_STAGES = {
@@ -66,7 +70,8 @@ def register_model_group(
 register_model_group(
     models={
         "Baichuan-7B-Base": {
-            DownloadSource.DEFAULT: "baichuan-inc/Baichuan-7B",
+            # DownloadSource.DEFAULT: "baichuan-inc/Baichuan-7B",
+            DownloadSource.DEFAULT: "/aigc/modelclub/baichuan-7B",
             DownloadSource.MODELSCOPE: "baichuan-inc/baichuan-7B"
         },
         "Baichuan-13B-Base": {
@@ -74,7 +79,8 @@ register_model_group(
             DownloadSource.MODELSCOPE: "baichuan-inc/Baichuan-13B-Base"
         },
         "Baichuan-13B-Chat": {
-            DownloadSource.DEFAULT: "baichuan-inc/Baichuan-13B-Chat",
+            # DownloadSource.DEFAULT: "baichuan-inc/Baichuan-13B-Chat",
+            DownloadSource.DEFAULT: "/aigc/modelclub/Baichuan-13B-Chat",
             DownloadSource.MODELSCOPE: "baichuan-inc/Baichuan-13B-Chat"
         }
     },
@@ -129,7 +135,8 @@ register_model_group(
 register_model_group(
     models={
         "BLOOMZ-560M": {
-            DownloadSource.DEFAULT: "bigscience/bloomz-560m",
+            # DownloadSource.DEFAULT: "bigscience/bloomz-560m",
+            DownloadSource.DEFAULT: "/aigc/modelclub/bloomz-560m",
             DownloadSource.MODELSCOPE: "AI-ModelScope/bloomz-560m"
         },
         "BLOOMZ-3B": {
@@ -163,7 +170,8 @@ register_model_group(
 register_model_group(
     models={
         "ChatGLM2-6B-Chat": {
-            DownloadSource.DEFAULT: "THUDM/chatglm2-6b",
+            # DownloadSource.DEFAULT: "THUDM/chatglm2-6b",
+            DownloadSource.DEFAULT: "/aigc/modelclub/chatglm2-6b",
             DownloadSource.MODELSCOPE: "ZhipuAI/chatglm2-6b"
         }
     },
@@ -175,11 +183,13 @@ register_model_group(
 register_model_group(
     models={
         "ChatGLM3-6B-Base": {
-            DownloadSource.DEFAULT: "THUDM/chatglm3-6b-base",
+            # DownloadSource.DEFAULT: "THUDM/chatglm3-6b-base",
+            DownloadSource.DEFAULT: "/aigc/modelclub/chatglm3-6b-base",
             DownloadSource.MODELSCOPE: "ZhipuAI/chatglm3-6b-base"
         },
         "ChatGLM3-6B-Chat": {
-            DownloadSource.DEFAULT: "THUDM/chatglm3-6b",
+            # DownloadSource.DEFAULT: "THUDM/chatglm3-6b",
+            DownloadSource.DEFAULT: "/aigc/modelclub/chatglm3-6b",
             DownloadSource.MODELSCOPE: "ZhipuAI/chatglm3-6b"
         }
     },
@@ -356,11 +366,13 @@ register_model_group(
 register_model_group(
     models={
         "LLaMA2-7B": {
-            DownloadSource.DEFAULT: "meta-llama/Llama-2-7b-hf",
+            # DownloadSource.DEFAULT: "meta-llama/Llama-2-7b-hf",
+            DownloadSource.DEFAULT: "/aigc/modelclub/Llama-2-7b-hf",
             DownloadSource.MODELSCOPE: "modelscope/Llama-2-7b-ms"
         },
         "LLaMA2-13B": {
-            DownloadSource.DEFAULT: "meta-llama/Llama-2-13b-hf",
+            # DownloadSource.DEFAULT: "meta-llama/Llama-2-13b-hf",
+            DownloadSource.DEFAULT: "/aigc/modelclub/Llama-2-13b-hf",
             DownloadSource.MODELSCOPE: "modelscope/Llama-2-13b-ms"
         },
         "LLaMA2-70B": {
@@ -368,11 +380,13 @@ register_model_group(
             DownloadSource.MODELSCOPE: "modelscope/Llama-2-70b-ms"
         },
         "LLaMA2-7B-Chat": {
-            DownloadSource.DEFAULT: "meta-llama/Llama-2-7b-chat-hf",
+            # DownloadSource.DEFAULT: "meta-llama/Llama-2-7b-chat-hf",
+            DownloadSource.DEFAULT: "/aigc/modelclub/Llama-2-7b-chat-hf",
             DownloadSource.MODELSCOPE: "modelscope/Llama-2-7b-chat-ms"
         },
         "LLaMA2-13B-Chat": {
-            DownloadSource.DEFAULT: "meta-llama/Llama-2-13b-chat-hf",
+            # DownloadSource.DEFAULT: "meta-llama/Llama-2-13b-chat-hf",
+            DownloadSource.DEFAULT: "/aigc/modelclub/Llama-2-13b-chat-hf",
             DownloadSource.MODELSCOPE: "modelscope/Llama-2-13b-chat-ms"
         },
         "LLaMA2-70B-Chat": {
@@ -387,7 +401,8 @@ register_model_group(
 register_model_group(
     models={
         "Mistral-7B": {
-            DownloadSource.DEFAULT: "mistralai/Mistral-7B-v0.1",
+            # DownloadSource.DEFAULT: "mistralai/Mistral-7B-v0.1",
+            DownloadSource.DEFAULT: "/aigc/modelclub/Mistral-7B-v0.1",
             DownloadSource.MODELSCOPE: "AI-ModelScope/Mistral-7B-v0.1"
         },
         "Mistral-7B-Chat": {
@@ -395,7 +410,8 @@ register_model_group(
             DownloadSource.MODELSCOPE: "AI-ModelScope/Mistral-7B-Instruct-v0.1"
         },
         "Mistral-7B-v0.2-Chat": {
-            DownloadSource.DEFAULT: "mistralai/Mistral-7B-Instruct-v0.2",
+            # DownloadSource.DEFAULT: "mistralai/Mistral-7B-Instruct-v0.2",
+            DownloadSource.DEFAULT: "/aigc/modelclub/Mistral-7B-Instruct-v0.2",
             DownloadSource.MODELSCOPE: "AI-ModelScope/Mistral-7B-Instruct-v0.2"
         }
     },

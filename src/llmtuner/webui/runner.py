@@ -1,3 +1,4 @@
+import json
 import os
 import time
 import logging
@@ -14,7 +15,7 @@ from llmtuner.extras.constants import TRAINING_STAGES
 from llmtuner.extras.logging import LoggerHandler
 from llmtuner.extras.misc import torch_gc
 from llmtuner.train import run_exp
-from llmtuner.webui.common import get_module, get_save_dir, load_config
+from llmtuner.webui.common import get_module, get_save_dir, load_config, get_scripts, DEFAULT_CACHE_DIR
 from llmtuner.webui.locales import ALERTS
 from llmtuner.webui.utils import gen_cmd, get_eval_results, update_process_bar
 
@@ -47,7 +48,7 @@ class Runner:
     def set_abort(self) -> None:
         self.aborted = True
 
-    def _initialize(self, data: Dict[Component, Any], do_train: bool, from_preview: bool) -> str:
+    def _initialize(self, data: Dict[Component, Any], do_train: bool, from_preview: bool, from_script: bool = False) -> str:
         get = lambda name: data[self.manager.get_elem_by_name(name)]
         lang, model_name, model_path = get("top.lang"), get("top.model_name"), get("top.model_path")
         dataset = get("train.dataset") if do_train else get("eval.dataset")
@@ -61,7 +62,7 @@ class Runner:
         if not model_path:
             return ALERTS["err_no_path"][lang]
 
-        if len(dataset) == 0:
+        if not from_script and len(dataset) == 0:
             return ALERTS["err_no_dataset"][lang]
 
         if self.demo_mode and (not from_preview):
@@ -98,7 +99,7 @@ class Runner:
             do_train=True,
             model_name_or_path=get("top.model_path"),
             adapter_name_or_path=adapter_name_or_path,
-            cache_dir=user_config.get("cache_dir", None),
+            cache_dir=user_config.get("cache_dir", None) if user_config.get("cache_dir", None) else get("train.cache_dir"),
             finetuning_type=get("top.finetuning_type"),
             quantization_bit=int(get("top.quantization_bit")) if get("top.quantization_bit") in ["8", "4"] else None,
             template=get("top.template"),
@@ -110,7 +111,7 @@ class Runner:
             cutoff_len=get("train.cutoff_len"),
             learning_rate=float(get("train.learning_rate")),
             num_train_epochs=float(get("train.num_train_epochs")),
-            max_samples=int(get("train.max_samples")),
+            max_samples=int(get("train.max_samples")) if not get("train.streaming") else None,
             per_device_train_batch_size=get("train.batch_size"),
             gradient_accumulation_steps=get("train.gradient_accumulation_steps"),
             lr_scheduler_type=get("train.lr_scheduler_type"),
@@ -126,6 +127,12 @@ class Runner:
             lora_target=get("train.lora_target") or get_module(get("top.model_name")),
             additional_target=get("train.additional_target") if get("train.additional_target") else None,
             create_new_adapter=get("train.create_new_adapter"),
+            preprocessing_num_workers=get("train.preprocessing_num_workers"),
+            overwrite_output_dir=get("train.overwrite_output_dir"),
+            overwrite_cache=get("train.overwrite_cache"),
+            report_to=get("train.report_to"),
+            streaming=get("train.streaming"),
+            log_level=get("train.log_level"),
             output_dir=get_save_dir(get("top.model_name"), get("top.finetuning_type"), get("train.output_dir"))
         )
         args[get("train.compute_type")] = True
@@ -148,6 +155,7 @@ class Runner:
             args["evaluation_strategy"] = "steps"
             args["eval_steps"] = get("train.save_steps")
             args["load_best_model_at_end"] = True
+            args["per_device_eval_batch_size"] = get("train.batch_size")
 
         return args
 
@@ -202,12 +210,21 @@ class Runner:
             yield gen_cmd(args), gr.update(visible=False)
 
     def _launch(self, data: Dict[Component, Any], do_train: bool) -> Generator[Tuple[str, Dict[str, Any]], None, None]:
-        error = self._initialize(data, do_train, from_preview=False)
+        get = lambda name: data[self.manager.get_elem_by_name(name)]
+        scripts_file = get('train.scripts_file')
+        from_script = False
+        if scripts_file != '无':
+            from_script = True
+        error = self._initialize(data, do_train, from_preview=False, from_script=from_script)
         if error:
             gr.Warning(error)
             yield error, gr.update(visible=False)
         else:
-            args = self._parse_train_args(data) if do_train else self._parse_eval_args(data)
+            if from_script:
+                args = json.loads(open(os.path.join(DEFAULT_CACHE_DIR, scripts_file)).read())
+                args['output_dir'] = get_save_dir(get("top.model_name"), get("top.finetuning_type"), get("train.output_dir"))
+            else:
+                args = self._parse_train_args(data) if do_train else self._parse_eval_args(data)
             run_kwargs = dict(args=args, callbacks=[self.trainer_callback])
             self.do_train, self.running_data = do_train, data
             self.thread = Thread(target=run_exp, kwargs=run_kwargs)
@@ -225,6 +242,24 @@ class Runner:
 
     def run_eval(self, data: Dict[Component, Any]) -> Generator[Tuple[str, Dict[str, Any]], None, None]:
         yield from self._launch(data, do_train=False)
+
+    def preview_script(self, data: Dict[Component, Any]) -> Generator[Tuple[str, Dict[str, Any]], None, None]:
+        scripts_file = data[self.manager.get_elem_by_name('train.scripts_file')]
+        if scripts_file != '无':
+            args =json.loads(open(os.path.join(DEFAULT_CACHE_DIR, scripts_file)).read())
+            yield gen_cmd(args), gr.update(visible=False)
+        else:
+            yield '', gr.update(visible=False)
+
+    def save_scripts(self, input_elems: Dict[Component, Any]=None):
+        os.makedirs(DEFAULT_CACHE_DIR, exist_ok=True)
+        scripts_path = input_elems[self.manager.get_elem_by_name('train.output_dir')]
+        if scripts_path:
+            args = self._parse_train_args(input_elems)
+            with open(os.path.join(DEFAULT_CACHE_DIR, os.path.split(scripts_path)[-1] + '.json'), "w", encoding="utf-8") as f:
+                json.dump(args, f, indent=2, ensure_ascii=False)
+        scripts = get_scripts()
+        return gr.update(choices=scripts)
 
     def monitor(self) -> Generator[Tuple[str, Dict[str, Any]], None, None]:
         get = lambda name: self.running_data[self.manager.get_elem_by_name(name)]

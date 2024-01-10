@@ -68,7 +68,7 @@ def gen_plot(base_model: str, finetuning_type: str, output_dir: str) -> "matplot
         return
 
     plt.close("all")
-    fig = plt.figure()
+    fig = plt.figure(figsize=(15, 6))
     ax = fig.add_subplot(111)
     steps, losses = [], []
     with open(log_file, "r", encoding="utf-8") as f:
